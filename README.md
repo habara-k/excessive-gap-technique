@@ -11,6 +11,10 @@ Solving $ \min_{x \in \Delta_n} \max_{y \in \Delta_m} x'Ay $ by several algorith
   - Gradient mapping (with Euclidean distance)
   - Bregman projection (with Entropy distance)
 
+## Benchmark
+
+![](https://user-images.githubusercontent.com/34413567/173423317-fa185fe8-e422-4a16-9f66-5e25d40e443c.png)
+
 ## References
 
 - Zinkevich, Martin. "Online convex programming and generalized infinitesimal gradient ascent." Proceedings of the 20th international conference on machine learning (icml-03). 2003.
