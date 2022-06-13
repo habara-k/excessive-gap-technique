@@ -3,6 +3,8 @@ from numpy import linalg as LA
 
 
 def euclidean_projection_onto_simplex(y):
+    # Wang, Weiran, and Miguel A. Carreira-Perpinán. "Projection onto the probability simplex: An efficient algorithm with a simple proof, and an application." arXiv preprint arXiv:1309.1541 (2013).
+
     (D,) = y.shape
     u = sorted(y)
     u.reverse()
