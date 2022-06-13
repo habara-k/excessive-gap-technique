@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 import datetime
+import os
 
 from utils import *
 from no_regret import online_gradient_descent, multiplicative_weights_update
@@ -11,14 +12,13 @@ from breg_proj import bregman_projection
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--step', '-s', type=int, default=10000)
-parser.add_argument('--output', '-o', default='result.png')
 parser.add_argument('--seed', type=int)
 args = parser.parse_args()
 
 
 def main():
-    if args.seed is not None:
-        np.random.seed(args.seed)
+    seed = np.random.randint(0,10000) if args.seed is None else args.seed
+    np.random.seed(seed)
 
     plt.xscale('log')
     plt.yscale('log')
@@ -44,8 +44,12 @@ def main():
 
     plt.legend()
     plt.grid()
+
+    dir = 'fig'
+    if not os.path.exists(dir):
+        os.makedirs(dir)
     now = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    plt.savefig('fig/' + now + '-' + args.output)
+    plt.savefig('{}/{}-seed={}-step={}.png'.format(dir, now, seed, args.step))
 
 
 if __name__ == '__main__':

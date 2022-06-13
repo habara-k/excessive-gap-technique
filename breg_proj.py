@@ -68,7 +68,7 @@ def bregman_projection(A, step):
             u_tmp = (1-tau)*u + tau*opt_u
             opt_x = dist.opt_x(mu_1, u_tmp)
             x_nxt = (1-tau)*x + tau*opt_x
-            grad = dist.breg_proj(opt_u, tau / ((1-tau) * mu_2) * opt_x @ A)  # WARNING
+            grad = dist.breg_proj(opt_u, -tau / ((1-tau) * mu_2) * opt_x @ A)  # WARNING
             u_nxt = (1-tau)*u + tau*grad
 
             x = x_nxt
