@@ -70,3 +70,39 @@ def multiplicative_weights_update(A, step):
         nash_conv.append(np.max(x_avg @ A) - np.min(A @ u_avg))
 
     return nash_conv
+
+
+def regret_matching(A, step):
+    (n,m) = A.shape
+    x = np.full(n, 1/n)
+    u = np.full(m, 1/m)
+    x_sum = x
+    u_sum = u
+
+    nash_conv = [np.max(x_sum @ A) - np.min(A @ u_sum)]
+
+    regsum_x = np.zeros(n)
+    regsum_u = np.zeros(m)
+
+    for t in tqdm(range(1, step)):
+        regsum_x += x @ A @ u - A @ u
+        regsum_u += x @ A - x @ A @ u
+
+        x_nxt = np.maximum(regsum_x, 0)
+        x_nxt /= np.sum(x_nxt)
+
+        u_nxt = np.maximum(regsum_u, 0)
+        u_nxt /= np.sum(u_nxt)
+
+        x = x_nxt
+        u = u_nxt
+
+        x_sum += x
+        u_sum += u
+
+        x_avg = x_sum / np.sum(x_sum)
+        u_avg = u_sum / np.sum(u_sum)
+
+        nash_conv.append(np.max(x_avg @ A) - np.min(A @ u_avg))
+
+    return nash_conv

@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 import argparse
 import datetime
 import os
+import json
 
 from utils import *
-from no_regret import online_gradient_descent, multiplicative_weights_update
+from no_regret import online_gradient_descent, multiplicative_weights_update, regret_matching
 from grad_map import gradient_mapping
 from breg_proj import bregman_projection
 
@@ -28,31 +29,41 @@ def main():
     plt.ylabel('nash conv')
 
     step = np.arange(1, args.step+1)
-    split = 1000
-    mask = [int(split * np.log(t+1) / np.log(args.step)) > int(split * np.log(t) / np.log(args.step)) for t in step]
+
+    nash_conv = {}
 
     A = np.random.rand(args.n, args.m)
-    nash_conv = np.array(multiplicative_weights_update(A, step=args.step))
-    plt.plot(step[mask], nash_conv[mask], label='no-regret(MWU)')
+    nash_conv['MWU'] = multiplicative_weights_update(A, step=args.step)
+    plt.plot(step, nash_conv['MWU'], label='no-regret(MWU)')
 
-    nash_conv = np.array(online_gradient_descent(A, step=args.step))
-    plt.plot(step[mask], nash_conv[mask], label='no-regret(OGD)')
+    nash_conv['RM'] = regret_matching(A, step=args.step)
+    plt.plot(step, nash_conv['RM'], label='no-regret(RM)')
 
-    nash_conv = np.array(gradient_mapping(A, step=args.step))
-    plt.plot(step[mask], nash_conv[mask], label='gradient mapping(euclid distance)')
+    nash_conv['OGD'] = online_gradient_descent(A, step=args.step)
+    plt.plot(step, nash_conv['OGD'], label='no-regret(OGD)')
 
-    nash_conv = np.array(bregman_projection(A, step=args.step))
-    plt.plot(step[mask], nash_conv[mask], label='bregman projection(entropy disance)')
+    nash_conv['EGT(Euclid)'] = gradient_mapping(A, step=args.step)
+    plt.plot(step, nash_conv['EGT(Euclid)'], label='excessive-gap-technique(Euclid)')
+
+    nash_conv['EGT(Entropy)'] = bregman_projection(A, step=args.step)
+    plt.plot(step, nash_conv['EGT(Entropy)'], label='excessive-gap-technique(Entropy)')
 
     plt.legend()
     plt.grid()
 
-    dir = 'fig'
-    if not os.path.exists(dir):
-        os.makedirs(dir)
     now = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    plt.savefig('{}/{}-n={}-m={}-seed={}-step={}.png'.format(
-        dir, now, args.n, args.m, seed, args.step))
+    dir = 'log/{}-n={}-m={}-seed={}-step={}'.format(
+            now, args.n, args.m, seed, args.step)
+    if not os.path.exists(dir):
+        os.makedirs(dir, exist_ok=True)
+    plt.savefig('{}/nash_conv_per_iter.png'.format(dir))
+
+    result = {
+            'A': A.tolist(),
+            'nash_conv': nash_conv
+            }
+    with open('{}/result.txt'.format(dir), 'w') as f:
+        f.write(json.dumps(result))
 
 
 if __name__ == '__main__':
