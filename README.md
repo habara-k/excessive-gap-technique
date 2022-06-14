@@ -13,7 +13,7 @@ Solving $ \min_{x \in \Delta_n} \max_{y \in \Delta_m} x'Ay $ by several algorith
 
 ## Benchmark
 
-![](https://user-images.githubusercontent.com/34413567/173423317-fa185fe8-e422-4a16-9f66-5e25d40e443c.png)
+![](https://user-images.githubusercontent.com/34413567/173497870-7bbf1534-df01-4d99-ae63-688da6a27e7b.png)
 
 ## References
 
