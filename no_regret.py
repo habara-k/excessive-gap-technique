@@ -46,9 +46,16 @@ def multiplicative_weights_update(A, step):
 
     nash_conv = [np.max(x_sum @ A) - np.min(A @ u_sum)]
 
+    k = 1
+    j = 0
+
     for t in tqdm(range(1, step)):
-        beta_1 = 1 / (1 + np.sqrt(2 * np.log(n) / int(np.sqrt(t))**2))
-        beta_2 = 1 / (1 + np.sqrt(2 * np.log(m) / int(np.sqrt(t))**2))
+        beta_1 = 1 / (1 + np.sqrt(2 * np.log(n) / k**2))
+        beta_2 = 1 / (1 + np.sqrt(2 * np.log(m) / k**2))
+        j += 1
+        if j == k**2:
+            j = 0
+            k += 1
 
         x_nxt = x * np.power(beta_1, A @ u)
         x_nxt /= np.sum(x_nxt)
