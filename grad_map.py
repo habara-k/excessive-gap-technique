@@ -44,8 +44,8 @@ class EuclideanDistance:
 def gradient_mapping(A, step):
     dist = EuclideanDistance(A)
 
-    scale_1 = dist.A_norm * np.sqrt(dist.D_1 / (dist.sigma_1*dist.sigma_2*dist.D_2))
-    scale_2 = dist.A_norm * np.sqrt(dist.D_2 / (dist.sigma_1*dist.sigma_2*dist.D_1))
+    scale_1 = dist.A_norm * np.sqrt(dist.D_2 / (dist.sigma_1*dist.sigma_2*dist.D_1))
+    scale_2 = dist.A_norm * np.sqrt(dist.D_1 / (dist.sigma_1*dist.sigma_2*dist.D_2))
 
     mu_2 = scale_2
     u = dist.opt_u(mu_2, dist.x_0)
@@ -74,8 +74,8 @@ def gradient_mapping(A, step):
             x = x_nxt
             u = u_nxt
 
-        assert LA.norm(x - euclidean_projection_onto_simplex(x)) < 1e-9
-        assert LA.norm(u - euclidean_projection_onto_simplex(u)) < 1e-9
+        assert np.abs(1 - np.sum(np.abs(x))) < 1e-9
+        assert np.abs(1 - np.sum(np.abs(u))) < 1e-9
         x = euclidean_projection_onto_simplex(x)
         u = euclidean_projection_onto_simplex(u)
 

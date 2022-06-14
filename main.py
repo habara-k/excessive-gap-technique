@@ -11,6 +11,8 @@ from breg_proj import bregman_projection
 
 
 parser = argparse.ArgumentParser()
+parser.add_argument('-n', type=int, default=4)
+parser.add_argument('-m', type=int, default=5)
 parser.add_argument('--step', '-s', type=int, default=10000)
 parser.add_argument('--seed', type=int)
 args = parser.parse_args()
@@ -29,12 +31,12 @@ def main():
     split = 1000
     mask = [int(split * np.log(t+1) / np.log(args.step)) > int(split * np.log(t) / np.log(args.step)) for t in step]
 
-    A = np.random.rand(4, 5)
-    nash_conv = np.array(online_gradient_descent(A, step=args.step))
-    plt.plot(step[mask], nash_conv[mask], label='no-regret(OGD)')
-
+    A = np.random.rand(args.n, args.m)
     nash_conv = np.array(multiplicative_weights_update(A, step=args.step))
     plt.plot(step[mask], nash_conv[mask], label='no-regret(MWU)')
+
+    nash_conv = np.array(online_gradient_descent(A, step=args.step))
+    plt.plot(step[mask], nash_conv[mask], label='no-regret(OGD)')
 
     nash_conv = np.array(gradient_mapping(A, step=args.step))
     plt.plot(step[mask], nash_conv[mask], label='gradient mapping(euclid distance)')
@@ -49,7 +51,8 @@ def main():
     if not os.path.exists(dir):
         os.makedirs(dir)
     now = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    plt.savefig('{}/{}-seed={}-step={}.png'.format(dir, now, seed, args.step))
+    plt.savefig('{}/{}-n={}-m={}-seed={}-step={}.png'.format(
+        dir, now, args.n, args.m, seed, args.step))
 
 
 if __name__ == '__main__':

@@ -16,14 +16,18 @@ class EntropyDistance:
         self.u_0 = np.full(m, 1/m)
 
     def opt_x(self, mu_1, u):
-        return euclidean_projection_onto_simplex(
-                self.x_0 - self.A @ u / mu_1
-                )
+        x = -self.A @ u / mu_1
+        x -= np.max(x)
+        x = np.exp(x)
+        x /= np.sum(x)
+        return x
 
     def opt_u(self, mu_2, x):
-        return euclidean_projection_onto_simplex(
-                self.u_0 + x @ self.A / mu_2
-                )
+        u = x @ self.A / mu_2
+        u -= np.max(u)
+        u = np.exp(u)
+        u /= np.sum(u)
+        return u
 
     def breg_proj(self, z, g):
         grad = z * np.exp(-g)
@@ -35,8 +39,8 @@ class EntropyDistance:
 def bregman_projection(A, step):
     dist = EntropyDistance(A)
 
-    scale_1 = dist.A_norm * np.sqrt(dist.D_1 / (dist.sigma_1*dist.sigma_2*dist.D_2))
-    scale_2 = dist.A_norm * np.sqrt(dist.D_2 / (dist.sigma_1*dist.sigma_2*dist.D_1))
+    scale_1 = dist.A_norm * np.sqrt(dist.D_2 / (dist.sigma_1*dist.sigma_2*dist.D_1))
+    scale_2 = dist.A_norm * np.sqrt(dist.D_1 / (dist.sigma_1*dist.sigma_2*dist.D_2))
 
     mu_2 = scale_2
     gamma = dist.sigma_1*dist.sigma_2*mu_2 / dist.A_norm**2
@@ -68,14 +72,14 @@ def bregman_projection(A, step):
             u_tmp = (1-tau)*u + tau*opt_u
             opt_x = dist.opt_x(mu_1, u_tmp)
             x_nxt = (1-tau)*x + tau*opt_x
-            grad = dist.breg_proj(opt_u, -tau / ((1-tau) * mu_2) * opt_x @ A)  # WARNING
+            grad = dist.breg_proj(opt_u, -tau / ((1-tau) * mu_2) * opt_x @ A)
             u_nxt = (1-tau)*u + tau*grad
 
             x = x_nxt
             u = u_nxt
 
-        assert LA.norm(x - euclidean_projection_onto_simplex(x)) < 1e-9, k
-        assert LA.norm(u - euclidean_projection_onto_simplex(u)) < 1e-9, k
+        assert np.abs(1 - np.sum(np.abs(x))) < 1e-9
+        assert np.abs(1 - np.sum(np.abs(u))) < 1e-9
         x = euclidean_projection_onto_simplex(x)
         u = euclidean_projection_onto_simplex(u)
 

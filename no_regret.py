@@ -24,13 +24,8 @@ def online_gradient_descent(A, step):
         x_sum += x
         u_sum += u
 
-        x_avg = x_sum / (t+1)
-        u_avg = u_sum / (t+1)
-
-        assert LA.norm(x_avg - euclidean_projection_onto_simplex(x_avg)) < 1e-9
-        assert LA.norm(u_avg - euclidean_projection_onto_simplex(u_avg)) < 1e-9
-        x_avg = euclidean_projection_onto_simplex(x_avg)
-        u_avg = euclidean_projection_onto_simplex(u_avg)
+        x_avg = x_sum / np.sum(x_sum)
+        u_avg = u_sum / np.sum(u_sum)
 
         nash_conv.append(np.max(x_avg @ A) - np.min(A @ u_avg))
 
@@ -69,13 +64,8 @@ def multiplicative_weights_update(A, step):
         x_sum += x
         u_sum += u
 
-        x_avg = x_sum / (t+1)
-        u_avg = u_sum / (t+1)
-
-        assert LA.norm(x_avg - euclidean_projection_onto_simplex(x_avg)) < 1e-9
-        assert LA.norm(u_avg - euclidean_projection_onto_simplex(u_avg)) < 1e-9
-        x_avg = euclidean_projection_onto_simplex(x_avg)
-        u_avg = euclidean_projection_onto_simplex(u_avg)
+        x_avg = x_sum / np.sum(x_sum)
+        u_avg = u_sum / np.sum(u_sum)
 
         nash_conv.append(np.max(x_avg @ A) - np.min(A @ u_avg))
 
