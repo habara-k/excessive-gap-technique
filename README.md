@@ -6,10 +6,11 @@ Solving $ \min_{x \in \Delta_n} \max_{y \in \Delta_m} x'Ay $ by several algorith
 
 - No-Regret Learning
   - Multiplicative Weights Update Algorithm (MWU)
+  - Regret Matching (RM)
   - Online Gradient Descent (OGD)
-- Excessive gap technique
-  - Gradient mapping (with Euclidean distance)
-  - Bregman projection (with Entropy distance)
+- Excessive gap technique (EGT)
+  - Euclidean distance (using Gradient mapping)
+  - Entropy distance (using Bregman projection)
 
 ## Benchmark
 
@@ -17,7 +18,7 @@ Solving $ \min_{x \in \Delta_n} \max_{y \in \Delta_m} x'Ay $ by several algorith
 python main.py --step 100000 --seed 0 -n 1000 -m 1000
 ```
 
-![](https://user-images.githubusercontent.com/34413567/173527104-7bdb686b-2f09-4a8d-abce-805845e399ec.png)
+![](https://user-images.githubusercontent.com/34413567/173562782-99ba0d78-c346-4492-91ad-c03eed14b9ec.png)
 
 
 ## References

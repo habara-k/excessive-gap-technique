@@ -106,3 +106,4 @@ def regret_matching(A, step):
         nash_conv.append(np.max(x_avg @ A) - np.min(A @ u_avg))
 
     return nash_conv
+

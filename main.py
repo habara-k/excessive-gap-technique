@@ -6,7 +6,7 @@ import os
 import json
 
 from utils import *
-from no_regret import online_gradient_descent, multiplicative_weights_update, regret_matching
+from no_regret import *
 from grad_map import gradient_mapping
 from breg_proj import bregman_projection
 
@@ -62,9 +62,10 @@ def main():
             'A': A.tolist(),
             'nash_conv': nash_conv
             }
-    with open('{}/result.txt'.format(dir), 'w') as f:
-        f.write(json.dumps(result))
+    with open('{}/result.json'.format(dir), 'w') as f:
+        json.dump(result, f)
 
 
 if __name__ == '__main__':
     main()
+

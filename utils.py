@@ -56,3 +56,4 @@ if __name__ == '__main__':
         actual = max_eigen_value(np.array(case))
         assert LA.norm(actual - expected) < 1e-9, \
             'case: {}, actual: {}, expected: {}'.format(case, actual, expected)
+
