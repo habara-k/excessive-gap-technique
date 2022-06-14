@@ -14,10 +14,10 @@ Solving $ \min_{x \in \Delta_n} \max_{y \in \Delta_m} x'Ay $ by several algorith
 ## Benchmark
 
 ```
-python main.py --step 10000 --seed 0 -n 1000 -m 1000
+python main.py --step 100000 --seed 0 -n 1000 -m 1000
 ```
-![](https://user-images.githubusercontent.com/34413567/173515842-a135744f-3e94-4bc4-81f4-2fa0465c56b6.png)
 
+![](https://user-images.githubusercontent.com/34413567/173527104-7bdb686b-2f09-4a8d-abce-805845e399ec.png)
 
 
 ## References
